@@ -1,35 +1,21 @@
-# Fact Table
-# songplays - records in log data associated with song plays i.e. records with page NextSong
-# songplay_id, start_time, user_id, level, song_id, artist_id, session_id, location, user_agent
-# Dimension Tables
-# users - users in the app
-# user_id, first_name, last_name, gender, level
-# songs - songs in music database
-# song_id, title, artist_id, year, duration
-# artists - artists in music database
-# artist_id, name, location, latitude, longitude
-# time - timestamps of records in songplays broken down into specific units
-# start_time, hour, day, week, month, year, weekday
-
-
 # DROP TABLES
 
-songplay_table_drop = "DROP TABLE songplays;"
-user_table_drop = "DROP TABLE users"
-song_table_drop = "DROP TABLE songs"
-artist_table_drop = "DROP TABLE artists"
-time_table_drop = "DROP TABLE time"
+songplay_table_drop = "DROP TABLE IF EXISTS songplays;"
+user_table_drop = "DROP TABLE IF EXISTS users"
+song_table_drop = "DROP TABLE IF EXISTS songs"
+artist_table_drop = "DROP TABLE IF EXISTS artists"
+time_table_drop = "DROP TABLE IF EXISTS time"
 
 # CREATE TABLES
 
 songplay_table_create = """
     CREATE TABLE IF NOT EXISTS songplays (
-        songplay_id int PRIMARY KEY,
+        songplay_id SERIAL,
         start_time timestamp,
         user_id int,
-        level int,
-        song_id int,
-        artist_id int,
+        level varchar,
+        song_id varchar,
+        artist_id varchar,
         session_id int,
         location varchar,
         user_agent varchar
@@ -37,38 +23,85 @@ songplay_table_create = """
 """
 
 user_table_create = """
+    CREATE TABLE IF NOT EXISTS users (
+        user_id int NOT NULL UNIQUE,
+        first_name varchar,
+        last_name varchar,
+        gender varchar,
+        level varchar
+    )
 """
 
 song_table_create = """
+    CREATE TABLE IF NOT EXISTS songs (
+        song_id varchar NOT NULL UNIQUE,
+        title varchar,
+        artist_id varchar,
+        year int,
+        duration numeric
+    )
 """
 
 artist_table_create = """
+    CREATE TABLE IF NOT EXISTS artists (
+        artist_id varchar NOT NULL UNIQUE,
+        name varchar,
+        location varchar,
+        latitude numeric,
+        longitude numeric
+    )
 """
 
 time_table_create = """
+    CREATE TABLE IF NOT EXISTS time (
+        start_time timestamp NOT NULL UNIQUE,
+        hour int,
+        day int,
+        week int,
+        month int,
+        year int,
+        weekday int
+    )
 """
 
 # INSERT RECORDS
 
 songplay_table_insert = """
+    INSERT INTO songplays (
+        "start_time", "user_id", "level", "song_id", "artist_id", "session_id", "location", "user_agent"
+    )
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
 """
 
 user_table_insert = """
+    INSERT INTO users ("user_id", "first_name", "last_name", "gender", "level")
+    VALUES (%s::integer, %s, %s, %s, %s)
 """
 
 song_table_insert = """
+    INSERT INTO songs ("song_id", "title", "artist_id", "year", "duration")
+    VALUES (%s, %s, %s, %s, %s)
 """
 
 artist_table_insert = """
+    INSERT INTO artists ("artist_id", "name", "location", "latitude", "longitude")
+    VALUES (%s, %s, %s, %s, %s)
 """
 
 
 time_table_insert = """
+    INSERT INTO time ("start_time", "hour", "day", "week", "month", "year", "weekday")
+    VALUES (%s, %s, %s, %s, %s, %s, %s)
 """
 
 # FIND SONGS
 
 song_select = """
+    SELECT s."song_id", s."artist_id" FROM songs s
+    JOIN artists a ON s."artist_id" = a."artist_id"
+    WHERE s."title" = %s
+        AND a."name" = %s
+        AND s."duration" = %s
 """
 
 # QUERY LISTS
