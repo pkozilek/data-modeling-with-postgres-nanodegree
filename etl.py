@@ -2,10 +2,29 @@ import os
 import glob
 import psycopg2
 import pandas as pd
-from sql_queries import *
+from sql_queries import (
+    artist_table_insert,
+    user_table_insert,
+    songplay_table_insert,
+    time_table_insert,
+    song_select,
+    song_table_insert,
+)
 
 
 def process_song_file(cur, filepath):
+    """
+    This function reads song data from a json file and insert on sparkifydb database.
+
+
+    Parameters
+    ----------
+    cur : object
+        Sparkifydb cursor.
+    filepath : str
+        Path to JSON song file.
+    """
+
     # open song file
     df = pd.read_json(filepath, lines=True)
 
@@ -24,6 +43,17 @@ def process_song_file(cur, filepath):
 
 
 def process_log_file(cur, filepath):
+    """
+    This function reads log data from a json file, transform and insert on sparkifydb database.
+
+
+    Parameters
+    ----------
+    cur : object
+        Sparkifydb cursor.
+    filepath : str
+        Path to JSON song file.
+    """
     # open log file
     df = pd.read_json(filepath, lines=True)
 
@@ -76,6 +106,21 @@ def process_log_file(cur, filepath):
 
 
 def process_data(cur, conn, filepath, func):
+    """
+    This function iterates over log and song files, process data and insert on sparkifydb database.
+
+
+    Parameters
+    ----------
+    cur : object
+        Sparkifydb cursor.
+    conn : object
+        Conection to sparkifydb database.
+    filepath : str
+        Path to data directory.
+    func : function
+        Function that process the data (process_song_file or process_log_file)
+    """
     # get all files matching extension from directory
     all_files = []
     for root, dirs, files in os.walk(filepath):
