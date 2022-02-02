@@ -32,9 +32,9 @@ To run this project it is necessary to have a postgres application running on lo
 
 The database schema chosen for this project was the star schema. It is a very popular schema for data analysis purposes. It is a denormalized schema that has the following advantages for the Sparkify startup context:
 
-* Fast aggregations: because of the simpler queries the performance in aggregations is better.
 * Simple queries: needs less join logic than normalized schemas.
-* High performance for read-only purposes
+* Fast aggregations: because of the simpler queries the performance in aggregations is better.
+* High performance for read-only purposes.
 
 The main disadvantage of this scheme is the lack of flexibility for specific queries, which is possible in normalized databases.
 
