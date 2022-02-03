@@ -40,6 +40,10 @@ The main disadvantage of this scheme is the lack of flexibility for specific que
 
 # Tables description
 
+## Entity relationship diagram
+
+    ![Entity relationship diagram](/sparkifydb_erd.png)
+
 ## Fact table
 
 * **songplays**: records in log data associated with song plays.
