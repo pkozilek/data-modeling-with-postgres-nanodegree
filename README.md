@@ -42,7 +42,7 @@ The main disadvantage of this scheme is the lack of flexibility for specific que
 
 ## Entity relationship diagram
 
-    ![Entity relationship diagram](/sparkifydb_erd.png)
+![Entity relationship diagram](/sparkifydb_erd.png)
 
 ## Fact table
 
